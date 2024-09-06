@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class LibraryTest {
-
     private Library library;
     private Book book1;
     private User user1;
