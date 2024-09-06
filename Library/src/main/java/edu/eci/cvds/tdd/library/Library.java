@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.time.LocalDateTime;
+
+
 /**
  * Library responsible for manage the loans and the users.
  */
@@ -66,8 +68,6 @@ public class Library {
      * @return The new created loan.
      */
     public Loan loanABook(String userId, String isbn) {
-        // TODO Implement the login of loan a book to a user based on the UserId and the
-        // isbn.
         Book book = getBookWithIsbn(isbn);
         if (book == null) {
             throw new IllegalArgumentException("Book with ISBN " + isbn + " does not exist.");
