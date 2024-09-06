@@ -2,12 +2,14 @@ package edu.eci.cvds.tdd.library;
 
 import edu.eci.cvds.tdd.library.book.Book;
 import edu.eci.cvds.tdd.library.loan.Loan;
+import edu.eci.cvds.tdd.library.loan.LoanStatus;
 import edu.eci.cvds.tdd.library.user.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDateTime;
 
 /**
  * Library responsible for manage the loans and the users.
@@ -37,6 +39,7 @@ public class Library {
     public boolean addBook(Book book) {
         //TODO Implement the logic to add a new book into the map.
         return false;
+
     }
 
     /**
