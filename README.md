@@ -41,7 +41,12 @@ Se crea la clase de pruebas ```LibraryTest```.
 
 - ***Método addBook***
 
-Para este caso, se consideran dos pruebas unitarias validando que se añada un libro nuevo y un libro existente.
+Para este caso de uso se trabaja desde la rama feature/addBook:
+
+![image](https://github.com/user-attachments/assets/b553e4a8-012e-4472-aaf7-4bdcabe62de2)
+
+
+Ahora, se consideran tres pruebas unitarias validando que se añada un libro nuevo, un libro existente y uno nulo.
 Se usa el siguiente comando para compilar el proyecto.
 
 ```xml
@@ -50,7 +55,14 @@ mvn clean package
 
 Se visualiza que efectivamente las pruebas fallaron:
 
-![image](https://github.com/user-attachments/assets/7022222b-0623-4251-84fe-6771af432076)
+
+![image](https://github.com/user-attachments/assets/36df37e8-83ff-4c8b-92f7-b77e95e56738)
+
+Fallaron dos pruebas.
+
+***Aclaración:***
+
+La prueba correspondiente a añadir un libro nulo pasó porque el método addBook actualmente retorna siempre false. 
 
 
 
