@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.time.LocalDateTime;
 
-
 /**
  * Library responsible for manage the loans and the users.
  */
