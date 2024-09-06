@@ -16,6 +16,7 @@ public class LibraryTest {
     private Library library;
     private Book book1;
     private User user1;
+    private Loan loan1;
 
     /**
      * Default constructor for test class LibraryTest
@@ -32,6 +33,11 @@ public class LibraryTest {
         book1 = new Book("The Hobbit", "J.R.R. Tolkien", "978-0618260300");
         library.addBook(book1);
         library.addUser(user1);
+        loan1 = new Loan();
+        loan1.setBook(book1);
+        loan1.setUser(user1);
+        loan1.setStatus(LoanStatus.ACTIVE);
+        loan1.setLoanDate(LocalDateTime.now());
     }
 
     @Test
