@@ -16,7 +16,6 @@ public class LibraryTest {
     private Library library;
     private Book book1;
     private User user1;
-    private Loan loan1;
 
     /**
      * Default constructor for test class LibraryTest
@@ -33,11 +32,6 @@ public class LibraryTest {
         book1 = new Book("The Hobbit", "J.R.R. Tolkien", "978-0618260300");
         library.addBook(book1);
         library.addUser(user1);
-        loan1 = new Loan();
-        loan1.setBook(book1);
-        loan1.setUser(user1);
-        loan1.setStatus(LoanStatus.ACTIVE);
-        loan1.setLoanDate(LocalDateTime.now());
     }
 
     @Test
@@ -62,6 +56,14 @@ public class LibraryTest {
         }
     }
 
+    @Test
+    public void shouldReturnLoanSuccessfully() {
+        Loan loan1 = library.loanABook("1","978-0618260300");
+        Loan returnedLoan = library.returnLoan(loan1);
+        assertNotNull(returnedLoan);
+        assertEquals(LoanStatus.RETURNED, returnedLoan.getStatus());
+        assertEquals(LocalDateTime.now().getDayOfYear(), returnedLoan.getReturnDate().getDayOfYear());
+    }
 
     @Test
     public void shouldNotLoanBookToNonexistentUser() {
@@ -74,6 +76,14 @@ public class LibraryTest {
         } catch (IllegalArgumentException e) {
             assertEquals("User with ID " + nonexistentUserId + " does not exist.", e.getMessage());
         }
+
+    }
+
+    @Test
+
+    public void shouldReturnNullIfLoanDoesNotExist() {
+        Loan returnedLoan = library.returnLoan(null);
+        assertNull(returnedLoan);
     }
 
     @Test
@@ -87,6 +97,14 @@ public class LibraryTest {
         } catch (IllegalArgumentException e) {
             assertEquals("Book with ISBN " + nonexistentIsbn + " does not exist.", e.getMessage());
         }
+    }
+
+    @Test
+    public void shouldReturnLoanAlreadyReturned() {
+        Loan loan1 = library.loanABook("1", "978-0618260300");
+        Loan returnedLoan1 = library.returnLoan(loan1);
+        Loan returnedLoan2 = library.returnLoan(loan1);
+        assertEquals(LoanStatus.RETURNED, returnedLoan2.getStatus());
     }
 
     @Test

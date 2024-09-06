@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.time.LocalDateTime;
-
-
 /**
  * Library responsible for manage the loans and the users.
  */
@@ -106,8 +104,22 @@ public class Library {
      * @return the loan with the RETURNED status.
      */
     public Loan returnLoan(Loan loan) {
-        //TODO Implement the login of loan a book to a user based on the UserId and the isbn.
-        return null;
+        Loan existingLoan = null;
+        if (loan == null) return loan;
+        for (Loan l : loans) {
+            if (l.equals(loan)) {
+                existingLoan = l;
+                break;
+            }
+        }
+        if (existingLoan == null) {
+            throw new IllegalArgumentException("The loan does not exist.");
+        }
+        existingLoan.setStatus(LoanStatus.RETURNED);
+        existingLoan.setReturnDate(LocalDateTime.now());
+        Book book = existingLoan.getBook();
+        books.put(book, books.get(book) + 1);
+        return existingLoan;
     }
 
     public boolean addUser(User user) {
