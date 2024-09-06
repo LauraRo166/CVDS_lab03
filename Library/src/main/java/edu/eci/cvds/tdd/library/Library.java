@@ -3,12 +3,14 @@ package edu.eci.cvds.tdd.library;
 import edu.eci.cvds.tdd.library.book.Book;
 import edu.eci.cvds.tdd.library.loan.Loan;
 import edu.eci.cvds.tdd.library.user.User;
+import edu.eci.cvds.tdd.library.loan.LoanStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Set;
+import java.time.LocalDateTime;
 /**
  * Library responsible for manage the loans and the users.
  */
@@ -35,7 +37,18 @@ public class Library {
      * @return true if the book was stored false otherwise.
      */
     public boolean addBook(Book book) {
-        //TODO Implement the logic to add a new book into the map.
+        if (book == null){
+            return false;
+        }
+        if (books.containsKey(book)){
+            int newAmount = books.get(book) + 1;
+            books.put(book, newAmount);
+            return true;
+        }
+        if (!books.containsKey(book)){
+            books.put(book,1);
+            return true;
+        }
         return false;
     }
 
@@ -53,8 +66,32 @@ public class Library {
      * @return The new created loan.
      */
     public Loan loanABook(String userId, String isbn) {
-        //TODO Implement the login of loan a book to a user based on the UserId and the isbn.
-        return null;
+        // TODO Implement the login of loan a book to a user based on the UserId and the
+        // isbn.
+        Book book = getBookWithIsbn(isbn);
+        if (book == null) {
+            throw new IllegalArgumentException("Book with ISBN " + isbn + " does not exist.");
+        }
+        User user = getUserWithId(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("User with ID " + userId + " does not exist.");
+        }
+        if (!books.containsKey(book) || books.get(book) <= 0) {
+            throw new IllegalStateException("The book is not available for loan.");
+        }
+        for (Loan l : loans) {
+            if (l.getUser().equals(user) && l.getBook().equals(book) && l.getStatus() == LoanStatus.ACTIVE) {
+                throw new IllegalStateException("The user already has an active loan for this book.");
+            }
+        }
+        Loan newLoan = new Loan();
+        newLoan.setBook(book);
+        newLoan.setUser(user);
+        newLoan.setStatus(LoanStatus.ACTIVE);
+        newLoan.setLoanDate(LocalDateTime.now());
+        loans.add(newLoan);
+        books.put(book, books.get(book) - 1);
+        return newLoan;
     }
 
     /**
@@ -67,12 +104,56 @@ public class Library {
      * @return the loan with the RETURNED status.
      */
     public Loan returnLoan(Loan loan) {
-        //TODO Implement the login of loan a book to a user based on the UserId and the isbn.
-        return null;
+        Loan existingLoan = null;
+        if (loan == null) return loan;
+        for (Loan l : loans) {
+            if (l.equals(loan)) {
+                existingLoan = l;
+                break;
+            }
+        }
+        if (existingLoan == null) {
+            throw new IllegalArgumentException("The loan does not exist.");
+        }
+        existingLoan.setStatus(LoanStatus.RETURNED);
+        existingLoan.setReturnDate(LocalDateTime.now());
+        Book book = existingLoan.getBook();
+        books.put(book, books.get(book) + 1);
+        return existingLoan;
     }
 
     public boolean addUser(User user) {
         return users.add(user);
+    }
+
+    /**
+     * Retrieves a {@link edu.eci.cvds.tdd.library.book.Book} object from the collection based on its ISBN.
+     *
+     * @param isbn The ISBN of the book to be searched.
+     * @return The {@link edu.eci.cvds.tdd.library.book.Book} object if found, otherwise returns {@code null}.
+     */
+    private Book getBookWithIsbn(String isbn){
+        for (Book b : books.keySet()) {
+            if (b.getIsbn().equals(isbn)) {
+                return b;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Retrieves a {@link edu.eci.cvds.tdd.library.user.User} object from the collection based on its ID.
+     *
+     * @param userId The ID of the user to be searched.
+     * @return The {@link edu.eci.cvds.tdd.library.user.User} object if found, otherwise returns {@code null}.
+     */
+    private User getUserWithId(String userId){
+        for (User u : users) {
+            if (u.getId().equals(userId)) {
+                return u;
+            }
+        }
+        return null;
     }
 
 }
